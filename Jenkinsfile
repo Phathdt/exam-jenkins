@@ -14,50 +14,50 @@ pipeline {
 
     stages {
         stage('Build NodeJs') {
-            steps {
-                script {
-                    if (params.BUILD_APP == 'nodejs') {
-                        echo '****** Build and tag image docker nodejs******'
+            when {
+                expression { params.BUILD_APP == 'nodejs' }
+            }
 
-                        sh './jenkins/nodejs_build.sh'
-                    }
-                }
+            steps {
+                echo '****** Build and tag image docker nodejs******'
+
+                sh './jenkins/nodejs_build.sh'
             }
         }
 
         stage('Push NodeJs') {
-            steps {
-                script {
-                    if (params.BUILD_APP == 'nodejs') {
-                        echo '****** Push image nodejs******'
+            when {
+                expression { params.BUILD_APP == 'nodejs' }
+            }
 
-                        sh './jenkins/nodejs_push.sh'
-                    }
-                }
+            steps {
+                echo '****** Push image nodejs******'
+
+                sh './jenkins/nodejs_push.sh'
             }
         }
 
         stage('Build Python') {
-            steps {
-                script {
-                    if (params.BUILD_APP == 'python') {
-                        echo '****** Build and tag image docker python******'
+            when {
+                expression { params.BUILD_APP == 'python' }
+            }
 
-                        sh './jenkins/python_build.sh'
-                    }
-                }
+            steps {
+                echo '****** Build and tag image docker python******'
+
+                sh './jenkins/python_build.sh'
             }
         }
 
         stage('Push Python') {
-            steps {
-                script {
-                    if (params.BUILD_APP == 'python') {
-                        echo '****** Push image python******'
+            when {
+                expression { params.BUILD_APP == 'python' }
+            }
 
-                        sh './jenkins/python_push.sh'
-                    }
-                }
+            steps {
+                echo '****** Push image python******'
+
+                sh './jenkins/python_push.sh'
             }
         }
     }
