@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent 'master'
 
     parameters {
         choice(name: 'BUILD_APP', choices: ['all', 'nodejs', 'python'], description: 'Build app')
@@ -94,6 +94,7 @@ pipeline {
         }
 
         stage('Deploy NodeJs') {
+            agent { docker 'slave' }
             when {
                 expression { params.BUILD_APP == 'nodejs' }
             }
@@ -106,6 +107,7 @@ pipeline {
         }
 
         stage('Deploy Python') {
+            agent { docker 'slave' }
             when {
                 expression { params.BUILD_APP == 'python' }
             }
@@ -118,6 +120,7 @@ pipeline {
         }
 
         stage('Deploy Nodejs + Python') {
+            agent { docker 'slave' }
             when {
                 expression { params.BUILD_APP == 'all' }
             }
