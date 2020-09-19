@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'BUILD_APP', choices: ['all', 'nodejs', 'python'], description: 'Build app')
+    }
+
     environment {
         PASS = credentials('DOCKER_HUB_PASS')
 
@@ -11,33 +15,41 @@ pipeline {
     stages {
         stage('Build NodeJs') {
             steps {
-                echo '****** Build and tag image docker nodejs******'
+                if (params.PERSON == 'nodejs') {
+                    echo '****** Build and tag image docker nodejs******'
 
-                sh './jenkins/nodejs_build.sh'
+                    sh './jenkins/nodejs_build.sh'
+                }
             }
         }
 
         stage('Push NodeJs') {
             steps {
-                echo '****** Push image nodejs******'
+                if (params.PERSON == 'nodejs') {
+                    echo '****** Push image nodejs******'
 
-                sh './jenkins/nodejs_push.sh'
+                    sh './jenkins/nodejs_push.sh'
+                }
             }
         }
 
         stage('Build Python') {
             steps {
-                echo '****** Build and tag image docker python******'
+                if (params.PERSON == 'python') {
+                    echo '****** Build and tag image docker python******'
 
-                sh './jenkins/python_build.sh'
+                    sh './jenkins/python_build.sh'
+                }
             }
         }
 
         stage('Push Python') {
             steps {
-                echo '****** Push image python******'
+                if (params.PERSON == 'python') {
+                    echo '****** Push image python******'
 
-                sh './jenkins/python_push.sh'
+                    sh './jenkins/python_push.sh'
+                }
             }
         }
     }
