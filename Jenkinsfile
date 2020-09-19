@@ -15,40 +15,48 @@ pipeline {
     stages {
         stage('Build NodeJs') {
             steps {
-                if (params.PERSON == 'nodejs') {
-                    echo '****** Build and tag image docker nodejs******'
+                script {
+                    if (params.PERSON == 'nodejs') {
+                        echo '****** Build and tag image docker nodejs******'
 
-                    sh './jenkins/nodejs_build.sh'
+                        sh './jenkins/nodejs_build.sh'
+                    }
                 }
             }
         }
 
         stage('Push NodeJs') {
             steps {
-                if (params.PERSON == 'nodejs') {
-                    echo '****** Push image nodejs******'
+                script {
+                    if (params.PERSON == 'nodejs') {
+                        echo '****** Push image nodejs******'
 
-                    sh './jenkins/nodejs_push.sh'
+                        sh './jenkins/nodejs_push.sh'
+                    }
                 }
             }
         }
 
         stage('Build Python') {
             steps {
-                if (params.PERSON == 'python') {
-                    echo '****** Build and tag image docker python******'
+                script {
+                    if (params.PERSON == 'python') {
+                        echo '****** Build and tag image docker python******'
 
-                    sh './jenkins/python_build.sh'
+                        sh './jenkins/python_build.sh'
+                    }
                 }
             }
         }
 
         stage('Push Python') {
             steps {
-                if (params.PERSON == 'python') {
-                    echo '****** Push image python******'
+                script {
+                    if (params.PERSON == 'python') {
+                        echo '****** Push image python******'
 
-                    sh './jenkins/python_push.sh'
+                        sh './jenkins/python_push.sh'
+                    }
                 }
             }
         }
