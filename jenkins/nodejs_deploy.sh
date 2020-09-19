@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ssh slave
+docker login -u phathdt379 -p $PASS
 
 docker pull ${DOCKER_NODEJS_IMAGE}:latest
 
