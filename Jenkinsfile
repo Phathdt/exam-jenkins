@@ -25,18 +25,6 @@ pipeline {
             }
         }
 
-        stage('Push NodeJs') {
-            when {
-                expression { params.BUILD_APP == 'nodejs' }
-            }
-
-            steps {
-                echo '****** Push image nodejs******'
-
-                sh './jenkins/nodejs_push.sh'
-            }
-        }
-
         stage('Build Python') {
             when {
                 expression { params.BUILD_APP == 'python' }
@@ -49,12 +37,56 @@ pipeline {
             }
         }
 
+        stage('Build Nodejs + Python') {
+            when {
+                expression { params.BUILD_APP == 'all' }
+            }
+
+            steps {
+                echo '****** Build and tag image docker nodejs******'
+
+                sh './jenkins/nodejs_build.sh'
+
+                echo '****** Build and tag image docker python******'
+
+                sh './jenkins/python_build.sh'
+            }
+        }
+
+        stage('Push NodeJs') {
+            when {
+                expression { params.BUILD_APP == 'nodejs' }
+            }
+
+            steps {
+                echo '****** Push image nodejs******'
+
+                sh './jenkins/nodejs_push.sh'
+            }
+        }
+
         stage('Push Python') {
             when {
                 expression { params.BUILD_APP == 'python' }
             }
 
             steps {
+                echo '****** Push image python******'
+
+                sh './jenkins/python_push.sh'
+            }
+        }
+
+        stage('Push Nodejs + Python') {
+            when {
+                expression { params.BUILD_APP == 'all' }
+            }
+
+            steps {
+                echo '****** Push image nodejs******'
+
+                sh './jenkins/nodejs_push.sh'
+
                 echo '****** Push image python******'
 
                 sh './jenkins/python_push.sh'
