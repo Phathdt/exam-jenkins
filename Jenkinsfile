@@ -92,5 +92,45 @@ pipeline {
                 sh './jenkins/python_push.sh'
             }
         }
+
+        stage('Deploy NodeJs') {
+            when {
+                expression { params.BUILD_APP == 'nodejs' }
+            }
+
+            steps {
+                echo '****** Deploy nodejs******'
+
+                sh './jenkins/nodejs_deploy.sh'
+            }
+        }
+
+        stage('Deploy Python') {
+            when {
+                expression { params.BUILD_APP == 'python' }
+            }
+
+            steps {
+                echo '****** Deploy python******'
+
+                sh './jenkins/python_deploy.sh'
+            }
+        }
+
+        stage('Deploy Nodejs + Python') {
+            when {
+                expression { params.BUILD_APP == 'all' }
+            }
+
+            steps {
+                echo '****** Deploy nodejs******'
+
+                sh './jenkins/nodejs_deploy.sh'
+
+                echo '****** Deploy python******'
+
+                sh './jenkins/python_deploy.sh'
+            }
+        }
     }
 }
