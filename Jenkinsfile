@@ -8,11 +8,19 @@ pipeline {
     }
 
     stages {
-        stage('Build Nodejs') {
+        stage('Build NodeJs') {
             steps {
                 echo '****** Build and tag image docker nodejs******'
 
                 sh './jenkins/nodejs_build.sh'
+            }
+        }
+
+        stage('Push NodeJs') {
+            steps {
+                echo '****** Push image nodejs******'
+
+                sh './jenkins/nodejs_push.sh'
             }
         }
     }
