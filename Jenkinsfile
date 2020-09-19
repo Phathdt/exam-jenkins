@@ -94,7 +94,8 @@ pipeline {
         }
 
         stage('Deploy NodeJs') {
-            agent { docker 'slave' }
+            agent 'slave'
+
             when {
                 expression { params.BUILD_APP == 'nodejs' }
             }
@@ -107,7 +108,8 @@ pipeline {
         }
 
         stage('Deploy Python') {
-            agent { docker 'slave' }
+            agent 'slave'
+
             when {
                 expression { params.BUILD_APP == 'python' }
             }
@@ -120,7 +122,8 @@ pipeline {
         }
 
         stage('Deploy Nodejs + Python') {
-            agent { docker 'slave' }
+            agent 'slave'
+
             when {
                 expression { params.BUILD_APP == 'all' }
             }
