@@ -1,5 +1,5 @@
 pipeline {
-    agent 'master'
+    agent any
 
     parameters {
         choice(name: 'BUILD_APP', choices: ['all', 'nodejs', 'python'], description: 'Build app')
