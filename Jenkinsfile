@@ -16,7 +16,7 @@ pipeline {
         stage('Build NodeJs') {
             steps {
                 script {
-                    if (params.PERSON == 'nodejs') {
+                    if (params.BUILD_APP == 'nodejs') {
                         echo '****** Build and tag image docker nodejs******'
 
                         sh './jenkins/nodejs_build.sh'
@@ -28,7 +28,7 @@ pipeline {
         stage('Push NodeJs') {
             steps {
                 script {
-                    if (params.PERSON == 'nodejs') {
+                    if (params.BUILD_APP == 'nodejs') {
                         echo '****** Push image nodejs******'
 
                         sh './jenkins/nodejs_push.sh'
@@ -40,7 +40,7 @@ pipeline {
         stage('Build Python') {
             steps {
                 script {
-                    if (params.PERSON == 'python') {
+                    if (params.BUILD_APP == 'python') {
                         echo '****** Build and tag image docker python******'
 
                         sh './jenkins/python_build.sh'
@@ -52,7 +52,7 @@ pipeline {
         stage('Push Python') {
             steps {
                 script {
-                    if (params.PERSON == 'python') {
+                    if (params.BUILD_APP == 'python') {
                         echo '****** Push image python******'
 
                         sh './jenkins/python_push.sh'
