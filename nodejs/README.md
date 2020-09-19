@@ -7,3 +7,8 @@ Great for testing simple deployments to the cloud
 ## Run It
 
 `npm start`
+
+
+```bash
+auto-update.sh phathdt379/nodejs-exam nodejs 3000
+```

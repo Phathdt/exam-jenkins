@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DOCKER_IMAGE=$1
 CONTAINER_NAME=$2
 PORT=$3
