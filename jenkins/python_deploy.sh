@@ -14,4 +14,4 @@ else
     /usr/bin/docker rm --force $CONTAINER
 fi
 
-docker run --name python -d -p 5000:5000 -e APP_VERSION="lastest" -e HOST_NAME="Phathdts-MacBook-Pro.local" ${DOCKER_PYTHON_IMAGE}:latest
+docker run --name python -d -p 5000:5000 -e APP_VERSION="lstest" -e HOST_NAME=$(hostname -f) ${DOCKER_PYTHON_IMAGE}:latest
