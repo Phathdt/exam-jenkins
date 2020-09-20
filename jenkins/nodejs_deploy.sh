@@ -6,7 +6,7 @@ docker pull ${DOCKER_NODEJS_IMAGE}:latest
 
 CID=$(docker ps | grep $DOCKER_NODEJS_IMAGE | awk '{print $1}')
 
-for im in $CID
+for im in "${CID[@]}"
 do
     echo "STOPPING $DOCKER_NODEJS_IMAGE - $im"
     docker rm -f $im
