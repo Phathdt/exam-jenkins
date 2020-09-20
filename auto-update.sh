@@ -1,25 +1,28 @@
 #!/bin/bash
 
-DOCKER_IMAGE=$1
+IMAGE=$1
 CONTAINER_NAME=$2
 PORT=$3
-REMOTE_SHA=$(curl https://registry.hub.docker.com/v2/repositories/$DOCKER_IMAGE/tags/latest | jq -r '."images"[]["digest"]')
-LOCAL_SHA=$(docker inspect --format='{{index .RepoDigests 0}}'  $DOCKER_IMAGE )
 
-if [[ "$DOCKER_IMAGE@$REMOTE_SHA" == "$LOCAL_SHA" ]]; then
-    echo "Match"
-else
-    echo "have a new image, let pull"
+CID=$(docker ps | grep $IMAGE | awk '{print $1}')
+
+docker pull $IMAGE
+
+for im in $CID
+do
+    LATEST=`docker inspect --format "{{.Id}}" $IMAGE`
+    RUNNING=`docker inspect --format "{{.Image}}" $im`
+    NAME=`docker inspect --format '{{.Name}}' $im | sed "s/\///g"`
     
-    docker pull ${DOCKER_IMAGE}:latest
+    echo "Latest:" $LATEST
+    echo "Running:" $RUNNING
     
-    RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER_NAME 2> /dev/null)
-    
-    if [ $? -eq 1 ]; then
-        echo "'$CONTAINER_NAME' does not exist."
+    if [ "$LATEST" != "$RUNNING" ];then
+        echo "upgrading $NAME"
+        docker rm -f $NAME
+        
+        docker run --name $CONTAINER_NAME -d -p ${PORT}:${PORT} -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${IMAGE}:latest
     else
-        /usr/bin/docker rm --force $CONTAINER_NAME
+        echo "$NAME up to date"
     fi
-    
-    docker run --name $CONTAINER_NAME -d -p ${PORT}:${PORT} -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${DOCKER_IMAGE}:latest
-fi
+done
