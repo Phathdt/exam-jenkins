@@ -1,28 +1,34 @@
 #!/bin/bash
 
-IMAGE=$1
-CONTAINER_NAME=$2
-PORT=$3
+IMAGES=(phathdt379/nodejs-exam phathdt379/python-exam)
 
-CID=$(docker ps | grep $IMAGE | awk '{print $1}')
-
-docker pull $IMAGE
-
-for im in $CID
+for IMAGE in $IMAGES
 do
-    LATEST=`docker inspect --format "{{.Id}}" $IMAGE`
-    RUNNING=`docker inspect --format "{{.Image}}" $im`
-    NAME=`docker inspect --format '{{.Name}}' $im | sed "s/\///g"`
+    echo "Progressing $IMAGE"
     
-    echo "Latest:" $LATEST
-    echo "Running:" $RUNNING
+    CID=$(docker ps | grep $IMAGE | awk '{print $1}')
     
-    if [ "$LATEST" != "$RUNNING" ];then
-        echo "upgrading $NAME"
-        docker rm -f $NAME
+    for im in $CID
+    do
+        docker pull $IMAGE
+        LATEST=`docker inspect --format "{{.Id}}" $IMAGE`
+        RUNNING=`docker inspect --format "{{.Image}}" $im`
         
-        docker run --name $CONTAINER_NAME -d -p ${PORT}:${PORT} -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${IMAGE}:latest
-    else
-        echo "$NAME up to date"
-    fi
+        echo "Latest:" $LATEST
+        echo "Running:" $RUNNING
+        
+        if [ "$LATEST" != "$RUNNING" ];then
+            echo "upgrading $image"
+            docker rm -f $im
+            
+            if [[ "$IMAGE" = "phathdt379/nodejs-exam" ]]; then
+                docker run -d -p 3000:3000 -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${IMAGE}:latest
+            else
+                docker run -d -p 5000:5000 -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${IMAGE}:latest
+            fi
+            
+        else
+            echo "$IMAGE up to date"
+        fi
+    done
 done
