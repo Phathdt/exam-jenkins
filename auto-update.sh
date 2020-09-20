@@ -2,13 +2,13 @@
 
 IMAGES=(phathdt379/nodejs-exam phathdt379/python-exam)
 
-for IMAGE in $IMAGES
+for IMAGE in "${IMAGES[@]}"
 do
     echo "Progressing $IMAGE"
     
     CID=$(docker ps | grep $IMAGE | awk '{print $1}')
     
-    for im in $CID
+    for im in "${CID[@]}"
     do
         docker pull $IMAGE
         LATEST=`docker inspect --format "{{.Id}}" $IMAGE`
