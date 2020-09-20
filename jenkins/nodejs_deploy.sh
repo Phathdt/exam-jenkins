@@ -4,14 +4,12 @@ docker login -u phathdt379 -p $PASS
 
 docker pull ${DOCKER_NODEJS_IMAGE}:latest
 
-CONTAINER=nodejs
+CID=$(docker ps | grep $DOCKER_NODEJS_IMAGE | awk '{print $1}')
 
-RUNNING=$(docker inspect --format="{{ .State.Running }}" $CONTAINER 2> /dev/null)
+for im in $CID
+do
+    echo "STOPPING $DOCKER_NODEJS_IMAGE - $im"
+    docker rm -f $im
+done
 
-if [ $? -eq 1 ]; then
-    echo "'$CONTAINER' does not exist."
-else
-    /usr/bin/docker rm --force $CONTAINER
-fi
-
-docker run --name nodejs -d -p 3000:3000 -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${DOCKER_NODEJS_IMAGE}:latest
+docker run -d -p 3000:3000 -e APP_VERSION="latest" -e HOST_NAME=$(hostname -f) ${DOCKER_NODEJS_IMAGE}:latest
